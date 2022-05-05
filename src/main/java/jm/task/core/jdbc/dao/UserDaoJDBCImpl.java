@@ -33,7 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Connection connection = Util.utf()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE user");
+            PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS user");
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -44,10 +44,11 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = Util.utf()) {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT INTO user VALUES (?, ?, ?)");
+                    connection.prepareStatement("INSERT INTO user (name, lastName, age) VALUES ( ?, ?, ?)");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
+            System.out.println("User с именем – " + name + " добавлен в базу данных");
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
