@@ -1021,25 +1021,5 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Host>localhost</Host>
       <Plugin>caching_sha2_password</Plugin>
     </user>
-    <table id="287" parent="278" name="user">
-      <Engine>InnoDB</Engine>
-      <CollationName>utf8_general_ci</CollationName>
-    </table>
-    <column id="288" parent="287" name="id">
-      <DataType>mediumtext|0s</DataType>
-      <Position>1</Position>
-    </column>
-    <column id="289" parent="287" name="name">
-      <DataType>varchar(20)|0s</DataType>
-      <Position>2</Position>
-    </column>
-    <column id="290" parent="287" name="lastName">
-      <DataType>varchar(25)|0s</DataType>
-      <Position>3</Position>
-    </column>
-    <column id="291" parent="287" name="age">
-      <DataType>tinyint|0s</DataType>
-      <Position>4</Position>
-    </column>
   </database-model>
 </dataSource>
