@@ -15,7 +15,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
 
     public void createUsersTable() {
-        try (Connection connection = Util.utf(); Statement statement = connection.createStatement()) {
+        try (Connection connection = Util.utf(); Statement statement = connection.createStatement() ) {
 
             String SQL = "CREATE TABLE IF NOT EXISTS user (" +
                     "  `id` BIGINT NOT NULL AUTO_INCREMENT," +
@@ -96,7 +96,6 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Connection connection = Util.utf(); Statement statement = connection.createStatement()) {
-            User user = new User();
             String SQL = "TRUNCATE TABLE user";
 
             statement.executeUpdate(SQL);
