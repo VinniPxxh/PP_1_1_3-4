@@ -17,14 +17,12 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try (Connection connection = Util.utf(); Statement statement = connection.createStatement()) {
 
-            String SQL = "CREATE TABLE IF NOT EXISTS user (" +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS user (" +
                     "  `id` BIGINT NOT NULL AUTO_INCREMENT," +
                     "  `Name` VARCHAR(45) NOT NULL," +
                     "  `LastName` VARCHAR(45) NOT NULL," +
                     "  `Age` TINYINT NOT NULL," +
-                    "  PRIMARY KEY (`id`))";
-
-            statement.executeUpdate(SQL);
+                    "  PRIMARY KEY (`id`))");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -35,10 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try (Connection connection = Util.utf(); Statement statement = connection.createStatement()) {
 
-            String SQL = "DROP TABLE IF EXISTS user";
-
-            statement.executeUpdate(SQL);
-
+            statement.executeUpdate("DROP TABLE IF EXISTS user");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -77,7 +72,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> person = new ArrayList<>();
         try (Connection connection = Util.utf(); ResultSet resultSet =
-                connection.createStatement().executeQuery("SELECT * FROM user") ) {
+                connection.createStatement().executeQuery("SELECT * FROM user")) {
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -94,10 +89,10 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Connection connection = Util.utf(); Statement statement = connection.createStatement()) {
-            String SQL = "TRUNCATE TABLE user";
+        try (Connection connection = Util.utf(); Statement statement =
+                connection.createStatement()) {
 
-            statement.executeUpdate(SQL);
+            statement.executeUpdate("TRUNCATE TABLE user");
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
