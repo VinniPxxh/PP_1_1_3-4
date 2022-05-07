@@ -40,7 +40,6 @@ public class UserDaoHibernateImpl implements UserDao {
             Transaction trDropTable = session.beginTransaction();
             session.createSQLQuery("DROP TABLE IF EXISTS user");
             trDropTable.commit();
-
         } catch (SessionException e) {
             throw new RuntimeException(e);
 
@@ -58,6 +57,7 @@ public class UserDaoHibernateImpl implements UserDao {
             trSaveUser.commit();
         } catch (SessionException e) {
             throw new RuntimeException(e);
+
         }
     }
 
