@@ -2,10 +2,10 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
 import org.hibernate.Transaction;
-
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -49,26 +49,20 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        try (Session session = Util.getSessionFactory().openSession()) {
-            Transaction trSaveUser = session.beginTransaction();
-            session.save(name);
-            session.save(lastName);
-            session.save(age);
-            trSaveUser.commit();
-        } catch (SessionException e) {
-            throw new RuntimeException(e);
 
-        }
     }
 
     @Override
     public void removeUserById(long id) {
+        String hql = "DELETE user WHERE id = :id";
         try (Session session = Util.getSessionFactory().openSession()) {
-            Transaction trRemoveUser = session.beginTransaction();
-            session.delete(id);
-            trRemoveUser.commit();
-        } catch (SessionException e) {
-            throw new RuntimeException(e);
+            session.beginTransaction();
+            session.createQuery(hql)
+                    .setParameter("id", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (HibernateException hb) {
+            throw new RuntimeException(hb);
         }
     }
 
