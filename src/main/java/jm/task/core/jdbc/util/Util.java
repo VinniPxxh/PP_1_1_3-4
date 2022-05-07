@@ -1,7 +1,7 @@
 package jm.task.core.jdbc.util;
 
 import com.mysql.cj.xdevapi.SessionFactory;
-import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
+import jm.task.core.jdbc.entity.MappingClass;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
@@ -27,6 +27,7 @@ public class Util {
     }
 
     private static SessionFactory sessionFactory;
+    private Util() {}
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
@@ -45,8 +46,8 @@ public class Util {
                 properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
                 properties.put(Environment.HBM2DDL_AUTO, "create-drop");
 
+                configuration.addAnnotatedClass(MappingClass.class);
                 configuration.setProperties(properties);
-                configuration.addAnnotatedClass(UserDaoHibernateImpl.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();
