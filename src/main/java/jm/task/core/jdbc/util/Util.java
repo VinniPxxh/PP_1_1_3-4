@@ -8,7 +8,7 @@ public class Util {
     private static final String PASSWORD = "!Vinni6325";
 
 
-    public static Connection utf() {
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
