@@ -1,7 +1,6 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -14,9 +13,12 @@ import java.sql.SQLException;
 
 public class Util {
     public static Util instance;
-    private Util() {}
+
+    private Util() {
+    }
+
     public static Util getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Util();
         }
         return instance;
@@ -40,24 +42,26 @@ public class Util {
     }
 
     public static SessionFactory getSessionFactory() {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.setProperty("hibernate.current_session_context_class", "thread");
-            configuration.setProperty(Environment.URL, URL);
-            configuration.setProperty(Environment.USER, USERNAME);
-            configuration.setProperty(Environment.PASS, PASSWORD);
-            configuration.setProperty("hibernate.connection.release_mode", "auto");
-            configuration.setProperty("hibernate.show_sql", "true");
-            configuration.addAnnotatedClass(User.class);
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties())
-                    .build();
-            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        } catch (HibernateException e) {
-            e.printStackTrace();
+        if (sessionFactory == null) {
+            try {
+                Configuration configuration = new Configuration();
+                configuration.setProperty("hibernate.current_session_context_class", "thread");
+                configuration.setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
+                configuration.setProperty(Environment.URL, URL);
+                configuration.setProperty(Environment.USER, USERNAME);
+                configuration.setProperty(Environment.PASS, PASSWORD);
+                configuration.setProperty("hibernate.connection.release_mode", "auto");
+                configuration.setProperty("hibernate.show_sql", "true");
+                configuration.addAnnotatedClass(User.class);
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties())
+                        .build();
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return sessionFactory;
     }
-
 }
 
