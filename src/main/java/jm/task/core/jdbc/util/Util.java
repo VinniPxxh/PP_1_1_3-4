@@ -16,7 +16,6 @@ import java.util.Properties;
 public class Util {
     public static Util instance;
     private Util() {}
-
     public static Util getInstance() {
         if(instance == null) {
             instance = new Util();
@@ -49,7 +48,7 @@ public class Util {
             properties.put(Environment.URL, URL);
             properties.put(Environment.USER, USERNAME);
             properties.put(Environment.PASS, PASSWORD);
-            properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
+            properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
             properties.put(Environment.SHOW_SQL, "true");
             properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
