@@ -1027,22 +1027,22 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </table>
     <column id="288" parent="287" name="id">
       <AutoIncrement>1</AutoIncrement>
-      <DataType>int|0s</DataType>
+      <DataType>bigint|0s</DataType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
     <column id="289" parent="287" name="name">
-      <DataType>varchar(45)|0s</DataType>
+      <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
     <column id="290" parent="287" name="lastName">
-      <DataType>varchar(45)|0s</DataType>
+      <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
     <column id="291" parent="287" name="age">
-      <DataType>int|0s</DataType>
+      <DataType>tinyint|0s</DataType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
