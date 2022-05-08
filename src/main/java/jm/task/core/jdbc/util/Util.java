@@ -11,7 +11,6 @@ import org.hibernate.service.ServiceRegistry;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class Util {
     public static Util instance;
@@ -42,23 +41,18 @@ public class Util {
 
     public static SessionFactory getSessionFactory() {
         try {
-            Configuration config = new Configuration();
-            Properties properties = new Properties();
-            properties.put(Environment.DRIVER, DRIVER);
-            properties.put(Environment.URL, URL);
-            properties.put(Environment.USER, USERNAME);
-            properties.put(Environment.PASS, PASSWORD);
-            properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-            properties.put(Environment.SHOW_SQL, "true");
-            properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
-            config.setProperties(properties);
-            config.addAnnotatedClass(User.class);
-
+            Configuration configuration = new Configuration();
+            configuration.setProperty("hibernate.current_session_context_class", "thread");
+            configuration.setProperty(Environment.URL, URL);
+            configuration.setProperty(Environment.USER, USERNAME);
+            configuration.setProperty(Environment.PASS, PASSWORD);
+            configuration.setProperty("hibernate.connection.release_mode", "auto");
+            configuration.setProperty("hibernate.show_sql", "true");
+            configuration.addAnnotatedClass(User.class);
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(config.getProperties()).build();
-
-            sessionFactory = config.buildSessionFactory(serviceRegistry);
+                    .applySettings(configuration.getProperties())
+                    .build();
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         } catch (HibernateException e) {
             e.printStackTrace();
         }
