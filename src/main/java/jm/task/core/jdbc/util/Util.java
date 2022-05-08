@@ -1,10 +1,10 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 
 import java.sql.Connection;
@@ -12,24 +12,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    public static Util instance;
-
-    private Util() {
-    }
-
-    public static Util getInstance() {
-        if (instance == null) {
-            instance = new Util();
-        }
-        return instance;
-    }
 
     private static final String URL = "jdbc:mysql://localhost:3306/pp_base";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "!Vinni6325";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static Connection connection;
-    private static SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory = null;
 
 
     public static Connection getConnection() {
@@ -42,24 +31,22 @@ public class Util {
     }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration();
-                configuration.setProperty("hibernate.current_session_context_class", "thread");
-                configuration.setProperty(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-                configuration.setProperty(Environment.URL, URL);
-                configuration.setProperty(Environment.USER, USERNAME);
-                configuration.setProperty(Environment.PASS, PASSWORD);
-                configuration.setProperty("hibernate.connection.release_mode", "auto");
-                configuration.setProperty("hibernate.show_sql", "true");
-                configuration.addAnnotatedClass(User.class);
-                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties())
-                        .build();
-                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            Configuration configuration = new Configuration()
+                    .setProperty("hibernate.connection.driver_class", DRIVER)
+                    .setProperty("hibernate.connection.url", URL)
+                    .setProperty("hibernate.connection.username",USERNAME )
+                    .setProperty("hibernate.connection.password", PASSWORD)
+                    .setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect")
+                    .addAnnotatedClass(User.class)
+                    .setProperty("hibernate.c3p0.min_size", "5")
+                    .setProperty("hibernate.c3p0.max_size", "200")
+                    .setProperty("hibernate.c3p0.max_statements", "200");
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties()).build();
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        } catch (HibernateException e) {
+            e.printStackTrace();
         }
         return sessionFactory;
     }
