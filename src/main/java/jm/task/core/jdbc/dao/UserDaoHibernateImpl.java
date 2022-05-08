@@ -13,8 +13,8 @@ import java.util.List;
 public class UserDaoHibernateImpl implements UserDao {
 
     private final SessionFactory sessionFactory = Util.getSessionFactory();
-    private Session session = null;
-    private Transaction transaction = null;
+    private Session session;
+    private Transaction transaction;
 
     public UserDaoHibernateImpl() {
 
@@ -64,13 +64,9 @@ public class UserDaoHibernateImpl implements UserDao {
         transaction = session.beginTransaction();
         try {
             session.save(new User(name, lastName, age));
-            session.beginTransaction();
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
         } finally {
             session.close();
         }
@@ -101,16 +97,20 @@ public class UserDaoHibernateImpl implements UserDao {
         criteriaQuery.from(User.class);
         transaction = session.beginTransaction();
         List<User> userList = session.createQuery(criteriaQuery).getResultList();
+        System.out.println(userList);
         try {
             transaction.commit();
             return userList;
         } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         } finally {
             session.close();
         }
         return userList;
+
     }
 
     @Override
@@ -122,7 +122,9 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (HibernateException e) {
             e.printStackTrace();
-            transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
         } finally {
             session.close();
         }
